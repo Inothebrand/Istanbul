@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Istanbul — Planning 6 jours</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rouge: #C0392B;
+    --or: #C8A96E;
+    --or-clair: #E8D5A8;
+    --brun: #2C1A0E;
+    --brun-moyen: #5C3D2E;
+    --creme: #F5EFE0;
+    --creme-fonce: #EDE3CC;
+    --texte: #2C1A0E;
+    --gris: #8B7355;
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+font-family: ‘Jost’, sans-serif;
+background-color: var(–brun);
+color: var(–texte);
+min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+background: var(–brun);
+padding: 60px 40px 40px;
+text-align: center;
+position: relative;
+overflow: hidden;
+border-bottom: 1px solid rgba(200,169,110,0.3);
+}
+
+.header::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0; bottom: 0;
+background: radial-gradient(ellipse at 50% 0%, rgba(200,169,110,0.12) 0%, transparent 70%);
+pointer-events: none;
+}
+
+.header-eyebrow {
+font-family: ‘Jost’, sans-serif;
+font-size: 11px;
+font-weight: 500;
+letter-spacing: 4px;
+text-transform: uppercase;
+color: var(–or);
+margin-bottom: 16px;
+opacity: 0;
+animation: fadeUp 0.6s 0.1s forwards;
+}
+
+.header h1 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(42px, 7vw, 80px);
+font-weight: 300;
+color: var(–creme);
+line-height: 1;
+letter-spacing: -1px;
+opacity: 0;
+animation: fadeUp 0.7s 0.2s forwards;
+}
+
+.header h1 em {
+font-style: italic;
+color: var(–or);
+}
+
+.header-sub {
+font-size: 13px;
+font-weight: 300;
+color: rgba(245,239,224,0.5);
+letter-spacing: 2px;
+margin-top: 14px;
+opacity: 0;
+animation: fadeUp 0.7s 0.35s forwards;
+}
+
+.ornament {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 14px;
+margin: 22px 0 0;
+opacity: 0;
+animation: fadeUp 0.7s 0.45s forwards;
+}
+.ornament-line { width: 60px; height: 1px; background: var(–or); opacity: 0.5; }
+.ornament-dot { width: 5px; height: 5px; border-radius: 50%; background: var(–or); }
+
+/* MAIN */
+.container {
+max-width: 900px;
+margin: 0 auto;
+padding: 40px 20px 80px;
+}
+
+/* DAY CARD */
+.day-card {
+background: var(–creme);
+border-radius: 2px;
+margin-bottom: 24px;
+overflow: hidden;
+opacity: 0;
+transform: translateY(20px);
+animation: fadeUp 0.6s forwards;
+box-shadow: 0 4px 30px rgba(0,0,0,0.25);
+}
+
+.day-card:nth-child(1) { animation-delay: 0.1s; }
+.day-card:nth-child(2) { animation-delay: 0.2s; }
+.day-card:nth-child(3) { animation-delay: 0.3s; }
+.day-card:nth-child(4) { animation-delay: 0.4s; }
+.day-card:nth-child(5) { animation-delay: 0.5s; }
+.day-card:nth-child(6) { animation-delay: 0.6s; }
+
+.day-header {
+display: flex;
+align-items: stretch;
+background: var(–brun-moyen);
+cursor: pointer;
+transition: background 0.2s;
+}
+.day-header:hover { background: #6b4a38; }
+
+.day-num {
+background: var(–or);
+color: var(–brun);
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 36px;
+font-weight: 600;
+width: 72px;
+min-width: 72px;
+display: flex;
+align-items: center;
+justify-content: center;
+line-height: 1;
+}
+
+.day-title-wrap {
+padding: 16px 20px;
+flex: 1;
+}
+
+.day-label {
+font-size: 10px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: rgba(245,239,224,0.5);
+font-weight: 400;
+margin-bottom: 4px;
+}
+
+.day-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 22px;
+font-weight: 300;
+color: var(–creme);
+font-style: italic;
+}
+
+.day-toggle {
+display: flex;
+align-items: center;
+padding: 0 20px;
+color: var(–or);
+font-size: 18px;
+transition: transform 0.3s;
+}
+.day-toggle.open { transform: rotate(180deg); }
+
+/* BODY */
+.day-body {
+display: none;
+padding: 0;
+}
+.day-body.open { display: block; }
+
+/* TIMELINE */
+.timeline {
+padding: 24px 28px 28px;
+position: relative;
+}
+
+.timeline-item {
+display: flex;
+gap: 18px;
+margin-bottom: 0;
+position: relative;
+}
+
+.timeline-item:not(:last-child)::before {
+content: ‘’;
+position: absolute;
+left: 14px;
+top: 30px;
+bottom: -8px;
+width: 1px;
+background: var(–or-clair);
+}
+
+.timeline-left {
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 30px;
+flex-shrink: 0;
+padding-top: 6px;
+}
+
+.timeline-dot {
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: var(–or);
+flex-shrink: 0;
+margin-top: 4px;
+position: relative;
+z-index: 1;
+}
+
+.timeline-dot.meal {
+background: var(–rouge);
+width: 10px;
+height: 10px;
+margin-top: 3px;
+}
+
+.timeline-dot.option {
+background: var(–gris);
+}
+
+.timeline-right {
+padding-bottom: 22px;
+flex: 1;
+}
+
+.item-tag {
+font-size: 9px;
+letter-spacing: 2.5px;
+text-transform: uppercase;
+font-weight: 500;
+margin-bottom: 3px;
+}
+
+.tag-visite { color: var(–gris); }
+.tag-dejeuner { color: var(–rouge); }
+.tag-diner { color: var(–rouge); }
+.tag-gouter { color: var(–brun-moyen); }
+.tag-option { color: var(–gris); }
+
+.item-name {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 19px;
+font-weight: 400;
+color: var(–brun);
+line-height: 1.2;
+}
+
+.item-note {
+font-size: 12px;
+font-weight: 300;
+color: var(–gris);
+margin-top: 3px;
+font-style: italic;
+}
+
+/* MEAL CHIP */
+.meal-block {
+background: #FBF5EA;
+border-left: 3px solid var(–rouge);
+border-radius: 0 2px 2px 0;
+padding: 10px 14px;
+margin-bottom: 22px;
+}
+
+.meal-block .item-name {
+font-size: 18px;
+}
+
+/* SEPARATOR */
+.day-sep {
+height: 1px;
+background: var(–or-clair);
+margin: 0 28px 20px;
+}
+
+/* FOOTER NOTE */
+.footer-note {
+text-align: center;
+font-size: 11px;
+font-weight: 300;
+letter-spacing: 2px;
+color: rgba(245,239,224,0.3);
+margin-top: 60px;
+text-transform: uppercase;
+}
+
+/* LEGEND */
+.legend {
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
+padding: 20px 28px;
+background: var(–creme-fonce);
+border-top: 1px solid var(–or-clair);
+}
+
+.legend-item {
+display: flex;
+align-items: center;
+gap: 7px;
+font-size: 11px;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+color: var(–gris);
+font-weight: 400;
+}
+
+.legend-dot {
+width: 8px; height: 8px;
+border-radius: 50%;
+flex-shrink: 0;
+}
+
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(16px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+.header { padding: 40px 20px 30px; }
+.timeline { padding: 18px 16px 20px; }
+.day-sep { margin: 0 16px 16px; }
+.legend { padding: 14px 16px; }
+.meal-block { padding: 8px 12px; }
+}
+</style>
+
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Voyage · 6 jours</div>
+  <h1><em>Istanbul</em></h1>
+  <div class="header-sub">Planning jour par jour · Activités & Restaurants</div>
+  <div class="ornament">
+    <div class="ornament-line"></div>
+    <div class="ornament-dot"></div>
+    <div class="ornament-line"></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- JOUR 1 -->
+
+  <div class="day-card">
+    <div class="day-header" onclick="toggle(this)">
+      <div class="day-num">1</div>
+      <div class="day-title-wrap">
+        <div class="day-label">Jour un</div>
+        <div class="day-title">Centre historique</div>
+      </div>
+      <div class="day-toggle">▾</div>
+    </div>
+    <div class="day-body open">
+      <div class="timeline">
+
+```
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Visite</div>
+        <div class="item-name">Grand Bazar</div>
+        <div class="item-note">Le plus grand marché couvert du monde — arriver tôt</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-dejeuner">Déjeuner</div>
+          <div class="item-name">Bazlama</div>
+          <div class="item-note">Cantine locale à deux pas du Grand Bazar — sandwich turc traditionnel</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Visite</div>
+        <div class="item-name">Çadırcılar Caddesi</div>
+        <div class="item-note">L'artère commerçante animée qui borde le Grand Bazar</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-gouter">Goûter</div>
+        <div class="item-name">Hafız Mustafa 1864 Beyazıt</div>
+        <div class="item-note">Pâtisserie ottomane emblématique — à 5 min à pied du Bazar aux épices</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Visite</div>
+        <div class="item-name">Bazar aux épices</div>
+        <div class="item-note">Mısır Çarşısı — couleurs, senteurs, thés et lokums</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-diner">Dîner</div>
+          <div class="item-name">Mivan Restaurant & Cafe ★ 4.9</div>
+          <div class="item-note">Piyer Loti Cd. · Fatih — à 10 min à pied du Bazar aux épices · kebabs, mezze, ambiance chaleureuse</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- JOUR 2 -->
+
+  <div class="day-card">
+    <div class="day-header" onclick="toggle(this)">
+      <div class="day-num">2</div>
+      <div class="day-title-wrap">
+        <div class="day-label">Jour deux</div>
+        <div class="day-title">Sultanahmet</div>
+      </div>
+      <div class="day-toggle">▾</div>
+    </div>
+    <div class="day-body open">
+      <div class="timeline">
+
+```
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-dejeuner">Petit-déjeuner / Déjeuner</div>
+          <div class="item-name">Grace Rooftop ★ 4.7</div>
+          <div class="item-note">Terzihane Sk. · Sultanahmet — vue sur la Mosquée Bleue, ouvert dès 8h · idéal pour lancer la journée</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Visite</div>
+        <div class="item-name">Mosquée Bleue</div>
+        <div class="item-note">Sultanahmet Camii · à 2 min de Grace Rooftop à pied</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Visite</div>
+        <div class="item-name">Sainte-Sophie</div>
+        <div class="item-note">Hagia Sophia · juste en face de la Mosquée Bleue</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Visite</div>
+        <div class="item-name">Palais de Topkapı</div>
+        <div class="item-note">À 10 min à pied de Sainte-Sophie · prévoir 2h minimum</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-diner">Goûter / Dîner</div>
+          <div class="item-name">Seven Hills ★ 4.5</div>
+          <div class="item-note">Tevkifhane Sk. · Cankurtaran — terrasse avec vue sur la Mosquée Bleue et Sainte-Sophie · ouvert 8h30–23h</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Activité</div>
+        <div class="item-name">Croisière Bosphore + Corne d'Or</div>
+        <div class="item-note">Embarquement depuis Eminönü · en soirée pour les lumières de la ville</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- JOUR 3 -->
+
+  <div class="day-card">
+    <div class="day-header" onclick="toggle(this)">
+      <div class="day-num">3</div>
+      <div class="day-title-wrap">
+        <div class="day-label">Jour trois</div>
+        <div class="day-title">Galata & Istiklal</div>
+      </div>
+      <div class="day-toggle">▾</div>
+    </div>
+    <div class="day-body open">
+      <div class="timeline">
+
+```
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-dejeuner">Petit-déjeuner / Déjeuner</div>
+          <div class="item-name">Dükkan Galata ★ 4.6</div>
+          <div class="item-note">Tatar Beyi Sk. · Beyoğlu — à deux pas de la Tour de Galata · brunch créatif, végétarien-friendly · ouvert 8h30</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Visite</div>
+        <div class="item-name">Rue Istiklal</div>
+        <div class="item-note">Grande artère piétonne · boutiques, galeries, tram nostalgique</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Visite</div>
+        <div class="item-name">Tour de Galata</div>
+        <div class="item-note">Vue panoramique sur Istanbul · prévoir la file d'attente</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-gouter">Goûter</div>
+        <div class="item-name">Viyana Kahvesi Galata</div>
+        <div class="item-note">Ambiance viennoise · cheesecake signature · à 2 min de la Tour de Galata</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Activité</div>
+        <div class="item-name">Hammam</div>
+        <div class="item-note">Expérience hammam traditionnel · réserver à l'avance</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-diner">Dîner</div>
+          <div class="item-name">Tomtom Kebap ★ 4.8</div>
+          <div class="item-note">Yeni Çarşı Cd. · Beyoğlu — à 5 min à pied d'Istiklal · ouvert jusqu'à 22h · kebabs acclamés, meilleur spot du quartier Galata</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- JOUR 4 -->
+
+  <div class="day-card">
+    <div class="day-header" onclick="toggle(this)">
+      <div class="day-num">4</div>
+      <div class="day-title-wrap">
+        <div class="day-label">Jour quatre</div>
+        <div class="day-title">Beşiktaş & Dolmabahçe</div>
+      </div>
+      <div class="day-toggle">▾</div>
+    </div>
+    <div class="day-body open">
+      <div class="timeline">
+
+```
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Visite</div>
+        <div class="item-name">Palais de Dolmabahçe</div>
+        <div class="item-note">Réserver en ligne · visite guidée obligatoire · prévoir 2h</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-dejeuner">Déjeuner</div>
+          <div class="item-name">Limonluk Cafe ★ 4.1</div>
+          <div class="item-note">Dolmabahçe Cd. · Beşiktaş — café élégant dans une serre vitrée à l'intérieur du domaine du palais · idéal pour la pause déjeuner</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Visite</div>
+        <div class="item-name">Beşiktaş</div>
+        <div class="item-note">Marché du quartier, vie locale, bord du Bosphore</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Balade</div>
+        <div class="item-name">Ortaköy & Bord du Bosphore</div>
+        <div class="item-note">Village charmant au pied du pont du Bosphore · kumpir en chemin</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-diner">Dîner</div>
+          <div class="item-name">Nusr-Et Steakhouse ★ 4.2</div>
+          <div class="item-note">Nisbetiye Cd. · Etiler / Beşiktaş — expérience gastronomique spectaculaire · réserver à l'avance · haut de gamme</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- JOUR 5 -->
+
+  <div class="day-card">
+    <div class="day-header" onclick="toggle(this)">
+      <div class="day-num">5</div>
+      <div class="day-title-wrap">
+        <div class="day-label">Jour cinq</div>
+        <div class="day-title">Rive asiatique & Çamlıca</div>
+      </div>
+      <div class="day-toggle">▾</div>
+    </div>
+    <div class="day-body open">
+      <div class="timeline">
+
+```
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Visite</div>
+        <div class="item-name">Mosquée de Çamlıca</div>
+        <div class="item-note">La plus grande mosquée de Turquie · vue panoramique sur Istanbul depuis la colline</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-dejeuner">Déjeuner</div>
+          <div class="item-name">Café ou resto local à Kadıköy</div>
+          <div class="item-note">Kadıköy est le quartier foodie d'Istanbul côté asiatique · marché Kadıköy, meze bars, boulangeries artisanales</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-visite">Balade</div>
+        <div class="item-name">Kadıköy ou Üsküdar</div>
+        <div class="item-note">Deux quartiers asiatiques authentiques · ferry depuis Eminönü ou Beşiktaş</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-diner">Dîner</div>
+          <div class="item-name">Gülhane Şark Sofrası ★ 4.8</div>
+          <div class="item-note">Alaykö şkü Cd. · Fatih — retour côté européen · cuisine ottomane généreuse, terrasse animée · service exceptionnel, meze offerts</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- JOUR 6 -->
+
+  <div class="day-card">
+    <div class="day-header" onclick="toggle(this)">
+      <div class="day-num">6</div>
+      <div class="day-title-wrap">
+        <div class="day-label">Jour six</div>
+        <div class="day-title">Îles des Princes ou Shopping</div>
+      </div>
+      <div class="day-toggle">▾</div>
+    </div>
+    <div class="day-body open">
+      <div class="timeline">
+
+```
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot option"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-option">Option A</div>
+        <div class="item-name">Îles des Princes — Büyükada</div>
+        <div class="item-note">Ferry depuis Kabataş · 1h15 de trajet · calèches, monastère, vue mer</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot option"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-option">Option B</div>
+        <div class="item-name">Venezia Mega Outlet</div>
+        <div class="item-note">Shopping outlet à 30–40 min du centre · navette depuis Aksaray disponible</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-dejeuner">Déjeuner</div>
+          <div class="item-name">Sur place selon option choisie</div>
+          <div class="item-note">Îles : cafés de l'île (spécialités de poisson). Outlet : food court ou restaurant intégré</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot"></div></div>
+      <div class="timeline-right">
+        <div class="item-tag tag-gouter">Goûter</div>
+        <div class="item-name">Dessert ou café sur place</div>
+        <div class="item-note">Îles : glace ou baklava en bord de mer. Outlet : salon de thé</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-left"><div class="timeline-dot meal"></div></div>
+      <div class="timeline-right">
+        <div class="meal-block">
+          <div class="item-tag tag-diner">Dîner</div>
+          <div class="item-name">Buhara Fish Meat House Roof ★ 4.9</div>
+          <div class="item-note">Nuru Osmaniye Cd. · Fatih — retour en ville, dîner de clôture avec vue sur les toits · cuisine ottomane raffinée · ouvert jusqu'à 22h30</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="footer-note">Istanbul · 6 jours · Planning personnalisé</div>
+
+</div>
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.day-toggle');
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+// All open by default, close on click toggle
+document.querySelectorAll('.day-toggle').forEach(el => el.classList.add('open'));
+</script>
+
+</body>
+</html>
